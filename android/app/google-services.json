@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "616358896426",
+    "project_id": "brewfitx-7fad0",
+    "storage_bucket": "brewfitx-7fad0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616358896426:android:c8512195ea2e090cf43453",
+        "android_client_info": {
+          "package_name": "com.example.brewfitx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZVnLyNPQP_luud25BMcmo89CQb-frQM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
