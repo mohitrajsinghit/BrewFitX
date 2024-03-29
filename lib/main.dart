@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primaryColor: TColor.primaryColor1,
           fontFamily: "Poppins"),
-      home: const StartedView(),
+      home: const LoginView(),
     );
   }
 }

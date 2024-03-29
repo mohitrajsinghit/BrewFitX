@@ -481,6 +481,8 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                   onPressed: () {
                     if (validateFields()) {
                       addUserToFirestore();
+                      _showMessage(context, "Success",
+                          "User details added successfully", Colors.lightGreen);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -488,10 +490,12 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                         ),
                       );
                     } else {
-                      // Display an error message or handle validation failure
+                      _showMessage(context, "Error",
+                          "Please fill all fields", Colors.red);
                     }
                   },
                 ),
+
                 SizedBox(height: media.width * 0.04),
               ],
             ),
@@ -544,5 +548,15 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
     } catch (e) {
       print('Error adding user to Firestore: $e');
     }
+  }
+  void _showMessage(
+      BuildContext context, String title, String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        duration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 }
