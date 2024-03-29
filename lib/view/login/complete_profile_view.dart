@@ -490,8 +490,8 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                         ),
                       );
                     } else {
-                      _showMessage(context, "Error",
-                          "Please fill all fields", Colors.red);
+                      _showMessage(context, "Error", "Please fill all fields",
+                          Colors.red);
                     }
                   },
                 ),
@@ -549,13 +549,14 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
       print('Error adding user to Firestore: $e');
     }
   }
+
   void _showMessage(
       BuildContext context, String title, String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: color,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(seconds: 1),
       ),
     );
   }

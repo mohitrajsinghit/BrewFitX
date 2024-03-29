@@ -2,6 +2,7 @@ import 'package:brewfitx/common_widget/round_button.dart';
 import 'package:brewfitx/common_widget/round_textfield.dart';
 import 'package:brewfitx/view/login/auth_service.dart';
 import 'package:brewfitx/view/login/complete_profile_view.dart';
+import 'package:brewfitx/view/login/forgot_pass_page.dart';
 import 'package:brewfitx/view/login/signup_view.dart';
 import 'package:brewfitx/view/login/welcome_view.dart';
 import 'package:flutter/material.dart';
@@ -96,12 +97,24 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          "Forgot your password?",
-                          style: TextStyle(
-                            color: TColor.gray,
-                            fontSize: 12,
-                            decoration: TextDecoration.underline,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ForgotPasswordPage();
+                                },
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Forgot your password?",
+                            style: TextStyle(
+                              color: TColor.gray,
+                              fontSize: 12,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
                         ),
                       ),
@@ -297,7 +310,7 @@ class _LoginViewState extends State<LoginView> {
       SnackBar(
         content: Text(message),
         backgroundColor: color,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(seconds: 1),
       ),
     );
   }
