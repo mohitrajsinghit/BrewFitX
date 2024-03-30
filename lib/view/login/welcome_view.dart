@@ -5,7 +5,9 @@ import 'package:brewfitx/view/main_tab/main_tab_view.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeView extends StatefulWidget {
-  const WelcomeView({super.key});
+  final String? firstName;
+
+  const WelcomeView({Key? key, required this.firstName});
 
   @override
   State<WelcomeView> createState() => _WelcomeViewState();
@@ -37,7 +39,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                 height: media.width * 0.1,
               ),
               Text(
-                "Welcome, Mohit",
+                "Welcome, ${widget.firstName ?? 'Guest'}",
                 style: TextStyle(
                     color: TColor.black,
                     fontSize: 20,

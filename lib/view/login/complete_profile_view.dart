@@ -1,5 +1,6 @@
 import 'package:brewfitx/common_widget/round_button.dart';
 import 'package:brewfitx/common_widget/round_textfield.dart';
+import 'package:brewfitx/view/login/welcome_view.dart';
 import 'package:brewfitx/view/login/what_your_goal_view.dart';
 import 'package:flutter/material.dart';
 import 'package:brewfitx/common/colo_extension.dart';
@@ -14,6 +15,7 @@ class CompleteProfileView extends StatefulWidget {
 
 class _CompleteProfileViewState extends State<CompleteProfileView> {
   String? selectedGender;
+  DateTime? selectedDate;
   TextEditingController txtFirstName = TextEditingController();
   TextEditingController txtLastName = TextEditingController();
   TextEditingController txtDOB = TextEditingController();
@@ -27,6 +29,23 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
   TextEditingController txtAge = TextEditingController();
   TextEditingController txtBloodType = TextEditingController();
   String? selectedState;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+        txtDOB.text = pickedDate.toString();
+      });
+    }
+  }
+
   List<String> indianStates = [
     'Andhra Pradesh',
     'Arunachal Pradesh',
@@ -263,11 +282,40 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                       ),
                       SizedBox(height: media.width * 0.02),
                       // Date of Birth Field
-                      RoundTextField(
-                        controller: txtDOB,
-                        hitText: "Date of Birth",
-                        icon: "assets/img/date.png",
+                      Container(
+                        height: 50, // Set the height to 50
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: TextFormField(
+                          controller: txtDOB,
+                          decoration: const InputDecoration(
+                            hintText: 'Select Date of Birth',
+                            hintStyle: TextStyle(fontSize: 12),
+                            prefixIcon: Icon(Icons.calendar_today),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 20),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                            );
+                            if (pickedDate != null) {
+                              setState(() {
+                                txtDOB.text =
+                                    pickedDate.toString().split(' ')[0];
+                              });
+                            }
+                          },
+                        ),
                       ),
+
                       SizedBox(height: media.width * 0.04),
                       // Weight Field
                       Row(
@@ -348,7 +396,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                             horizontal: 1, vertical: 2),
                         child: RoundTextField(
                           controller: txtBloodType,
-                          hitText: "Blood Group",
+                          hitText: "Blood Group (e.g., B+ve, O+ve)",
                           icon: "assets/img/blood.png",
                         ),
                       ),
@@ -486,7 +534,8 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const WhatYourGoalView(),
+                          builder: (context) =>
+                              WelcomeView(firstName: txtFirstName.text),
                         ),
                       );
                     } else {
@@ -520,6 +569,17 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
         selectedState == null) {
       return false;
     }
+
+    // Validate zip code length
+    if (txtZipCode.text.length != 6) {
+      return false;
+    }
+
+    // Validate zip code contains only numbers
+    if (!RegExp(r'^[0-9]*$').hasMatch(txtZipCode.text)) {
+      return false;
+    }
+
     return true;
   }
 
@@ -529,7 +589,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
           FirebaseFirestore.instance.collection('users');
       await usersCollection.add({
         'gender': selectedGender == 'Male' ? 'Male' : 'Female',
-        'dob': txtDOB.text,
+        'dob': Timestamp.fromDate(selectedDate!),
         'weight': double.tryParse(txtWeight.text) ?? 0.0,
         'height': double.tryParse(txtHeight.text) ?? 0.0,
         'firstName': txtFirstName.text,

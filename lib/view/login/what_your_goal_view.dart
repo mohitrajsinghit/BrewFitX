@@ -5,7 +5,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class WhatYourGoalView extends StatefulWidget {
-  const WhatYourGoalView({super.key});
+  final String? firstName; // Define the firstName parameter
+
+  const WhatYourGoalView({Key? key, this.firstName}) : super(key: key);
 
   @override
   State<WhatYourGoalView> createState() => _WhatYourGoalViewState();
@@ -130,16 +132,18 @@ class _WhatYourGoalViewState extends State<WhatYourGoalView> {
                 SizedBox(
                   height: media.width * 0.05,
                 ),
-
                 RoundButton(
                     title: "Confirm",
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const WelcomeView()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              WelcomeView(firstName: widget.firstName ?? ''),
+                        ),
+                      );
                     }),
-                    SizedBox(
+                SizedBox(
                   height: media.width * 0.1,
                 ),
               ],

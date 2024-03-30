@@ -1,15 +1,16 @@
 import 'package:brewfitx/common_widget/round_button.dart';
 import 'package:brewfitx/common_widget/round_textfield.dart';
 import 'package:brewfitx/view/login/auth_service.dart';
-import 'package:brewfitx/view/login/complete_profile_view.dart';
 import 'package:brewfitx/view/login/forgot_pass_page.dart';
 import 'package:brewfitx/view/login/signup_view.dart';
 import 'package:brewfitx/view/login/welcome_view.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../common/colo_extension.dart';
 
 class LoginView extends StatefulWidget {
+  
   const LoginView({Key? key});
 
   @override
@@ -28,7 +29,22 @@ class _LoginViewState extends State<LoginView> {
     _password.dispose();
   }
 
-  bool isCheck = false;
+  Future<String?> getFirstName(String email) async {
+    try {
+      var userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(email).get();
+      if (userDoc.exists &&
+          userDoc.data() != null &&
+          userDoc.data()!.containsKey('firstName')) {
+        return userDoc.data()!['firstName'];
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error retrieving first name: $e');
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,22 +138,27 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   const Spacer(),
                   RoundButton(
-                      title: "Login",
-                      onPressed: () async {
-                        final user = await _auth.loginUserWithEmailAndPassword(
-                            _email.text, _password.text);
-                        if (user != null) {
-                          _showMessage(context, "Congratulations",
-                              "Successfully Logged in", Colors.lightGreen);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const WelcomeView()));
-                        } else {
-                          _showMessage(context, "Oops",
-                              "Wrong credentials, try again", Colors.red);
-                        }
-                      }),
+                    title: "Login",
+                    onPressed: () async {
+                      final user = await _auth.loginUserWithEmailAndPassword(
+                          _email.text, _password.text);
+                      if (user != null) {
+                        _showMessage(context, "Congratulations",
+                            "Successfully Logged in", Colors.lightGreen);
+                        String? firstName = await getFirstName(_email.text);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                WelcomeView(firstName: firstName ?? ''),
+                          ),
+                        );
+                      } else {
+                        _showMessage(context, "Oops",
+                            "Wrong credentials, try again", Colors.red);
+                      }
+                    },
+                  ),
                   SizedBox(
                     height: media.width * 0.04,
                   ),
@@ -268,9 +289,10 @@ class _LoginViewState extends State<LoginView> {
                   TextButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignUpView()));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpView()),
+                      );
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
