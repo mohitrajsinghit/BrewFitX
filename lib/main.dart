@@ -1,3 +1,4 @@
+import 'package:brewfitx/view/login/welcome_view.dart';
 import 'package:brewfitx/view/login/what_your_goal_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primaryColor: TColor.primaryColor1,
           fontFamily: "Poppins"),
-      home: const StartedView(),
+      home: const LoginView(),
     );
   }
 }

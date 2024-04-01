@@ -4,13 +4,14 @@ import 'package:brewfitx/view/login/auth_service.dart';
 import 'package:brewfitx/view/login/forgot_pass_page.dart';
 import 'package:brewfitx/view/login/signup_view.dart';
 import 'package:brewfitx/view/login/welcome_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../common/colo_extension.dart';
 
 class LoginView extends StatefulWidget {
-  
   const LoginView({Key? key});
 
   @override
@@ -189,7 +190,9 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          await signInWithGoogle();
+                        },
                         child: Container(
                           width: 50,
                           height: 50,
@@ -197,23 +200,21 @@ class _LoginViewState extends State<LoginView> {
                           decoration: BoxDecoration(
                             color: TColor.white,
                             border: Border.all(
-                              width: 1,
-                              color: TColor.gray.withOpacity(0.4),
-                            ),
+                                width: 1, color: TColor.gray.withOpacity(0.4)),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: Image.asset(
-                            "assets/img/google.png",
-                            width: 20,
-                            height: 20,
-                          ),
+                          child: Image.asset("assets/img/google.png",
+                              width: 20, height: 20),
                         ),
                       ),
                       SizedBox(
                         width: media.width * 0.04,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          // Add your Apple button functionality here
+                          print('Apple button pressed!');
+                        },
                         child: Container(
                           width: 50,
                           height: 50,
@@ -237,7 +238,10 @@ class _LoginViewState extends State<LoginView> {
                         width: media.width * 0.04,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          // Add your Facebook button functionality here
+                          print('Facebook button pressed!');
+                        },
                         child: Container(
                           width: 50,
                           height: 50,
@@ -261,7 +265,10 @@ class _LoginViewState extends State<LoginView> {
                         width: media.width * 0.04,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          // Add your Twitter button functionality here
+                          print('Twitter button pressed!');
+                        },
                         child: Container(
                           width: 50,
                           height: 50,
@@ -335,5 +342,31 @@ class _LoginViewState extends State<LoginView> {
         duration: const Duration(seconds: 1),
       ),
     );
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn();
+      GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser != null) {
+        GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        String? firstName = await getFirstName(userCredential.user!.email!);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => WelcomeView(firstName: firstName ?? '')),
+        );
+      }
+    } catch (error) {
+      print('Error signing in with Google: $error');
+      _showMessage(
+          context, "Error", "Failed to sign in with Google", Colors.red);
+    }
   }
 }

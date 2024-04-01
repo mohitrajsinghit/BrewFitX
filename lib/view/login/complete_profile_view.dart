@@ -538,6 +538,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                               WelcomeView(firstName: txtFirstName.text),
                         ),
                       );
+
                     } else {
                       _showMessage(context, "Error", "Please fill all fields",
                           Colors.red);
