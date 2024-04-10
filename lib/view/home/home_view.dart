@@ -12,7 +12,10 @@ import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final String? firstName;
+   const HomeView({Key? key, required this.firstName})
+      : super(key: key);
+
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -130,10 +133,10 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         Text(
                           "Welcome Back,",
-                          style: TextStyle(color: TColor.gray, fontSize: 12),
+                          style: TextStyle(color: TColor.gray, fontSize: 14),
                         ),
                         Text(
-                          "Mohit Singh",
+                          " ${widget.firstName ?? 'Guest'}",
                           style: TextStyle(
                               color: TColor.black,
                               fontSize: 25,

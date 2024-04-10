@@ -3,6 +3,7 @@ import 'package:brewfitx/common_widget/round_textfield.dart';
 import 'package:brewfitx/view/login/auth_service.dart';
 import 'package:brewfitx/view/login/complete_profile_view.dart';
 import 'package:brewfitx/view/login/login_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/colo_extension.dart';
@@ -85,7 +86,7 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(
                   height: media.width * 0.08,
                 ),
-                
+
                 RoundTextField(
                   hitText: "Password",
                   controller: _password,
@@ -137,14 +138,15 @@ class _SignUpViewState extends State<SignUpView> {
                 RoundButton(
                     title: "Register",
                     onPressed: () async {
-                      final user = await _auth.createUserWithEmailAndPassword(
-                          _email.text, _password.text);
-                      if (user != null) {
+                      final fireuser =
+                          await _auth.createUserWithEmailAndPassword(
+                              _email.text, _password.text);
+                      if (fireuser != null) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const CompleteProfileView()));
+                                    CompleteProfileView(uid: fireuser.uid)));
                       }
                     }),
                 SizedBox(

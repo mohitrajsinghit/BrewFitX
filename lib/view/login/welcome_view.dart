@@ -1,19 +1,15 @@
 import 'package:brewfitx/common/colo_extension.dart';
 import 'package:brewfitx/common_widget/round_button.dart';
-import 'package:brewfitx/view/login/login_view.dart';
 import 'package:brewfitx/view/main_tab/main_tab_view.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeView extends StatefulWidget {
+class WelcomeView extends StatelessWidget {
   final String? firstName;
 
-  const WelcomeView({Key? key, required this.firstName});
 
-  @override
-  State<WelcomeView> createState() => _WelcomeViewState();
-}
+  const WelcomeView({Key? key, required this.firstName})
+      : super(key: key);
 
-class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -39,11 +35,12 @@ class _WelcomeViewState extends State<WelcomeView> {
                 height: media.width * 0.1,
               ),
               Text(
-                "Welcome, ${widget.firstName ?? 'Guest'}",
+                "Welcome, ${firstName ?? 'Guest'}",
                 style: TextStyle(
-                    color: TColor.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700),
+                  color: TColor.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               Text(
                 "You are all set now, let’s reach your\ngoals together with us",
@@ -52,13 +49,18 @@ class _WelcomeViewState extends State<WelcomeView> {
               ),
               const Spacer(),
               RoundButton(
-                  title: "Go To Home",
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MainTabView()));
-                  }),
+                title: "Go To Home",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainTabView(
+                        firstName: firstName,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

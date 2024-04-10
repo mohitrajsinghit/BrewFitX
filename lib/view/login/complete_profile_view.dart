@@ -1,13 +1,14 @@
 import 'package:brewfitx/common_widget/round_button.dart';
 import 'package:brewfitx/common_widget/round_textfield.dart';
 import 'package:brewfitx/view/login/welcome_view.dart';
-import 'package:brewfitx/view/login/what_your_goal_view.dart';
 import 'package:flutter/material.dart';
 import 'package:brewfitx/common/colo_extension.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CompleteProfileView extends StatefulWidget {
-  const CompleteProfileView({Key? key}) : super(key: key);
+  final String? uid;
+  const CompleteProfileView({Key? key, required this.uid});
 
   @override
   State<CompleteProfileView> createState() => _CompleteProfileViewState();
@@ -34,7 +35,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
+      firstDate: DateTime(1900),  
       lastDate: DateTime.now(),
     );
 
@@ -256,175 +257,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                           keyboardType: TextInputType.number,
                         ),
                       ),
-                      SizedBox(height: media.width * 0.05),
-                    ],
-                  ),
-                ),
-                SizedBox(height: media.width * 0.05),
-
-                // Physical Details Section
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 250, 220, 192),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: media.width * 0.02),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          "Physical Details:-",
-                          style: TextStyle(color: TColor.black, fontSize: 20),
-                        ),
-                      ),
-                      SizedBox(height: media.width * 0.02),
-                      // Date of Birth Field
-                      Container(
-                        height: 50, // Set the height to 50
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: TextFormField(
-                          controller: txtDOB,
-                          decoration: const InputDecoration(
-                            hintText: 'Select Date of Birth',
-                            hintStyle: TextStyle(fontSize: 12),
-                            prefixIcon: Icon(Icons.calendar_today),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 20),
-                          ),
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime.now(),
-                            );
-                            if (pickedDate != null) {
-                              setState(() {
-                                txtDOB.text =
-                                    pickedDate.toString().split(' ')[0];
-                              });
-                            }
-                          },
-                        ),
-                      ),
-
                       SizedBox(height: media.width * 0.04),
-                      // Weight Field
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RoundTextField(
-                              controller: txtWeight,
-                              hitText: "Your Weight",
-                              icon: "assets/img/weight.png",
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            width: 50,
-                            height: 50,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: TColor.secondaryG,
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Text(
-                              "KG",
-                              style:
-                                  TextStyle(color: TColor.white, fontSize: 12),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: media.width * 0.04),
-                      // Height Field
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RoundTextField(
-                              controller: txtHeight,
-                              hitText: "Your Height",
-                              icon: "assets/img/height.png",
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            width: 50,
-                            height: 50,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: TColor.secondaryG,
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Text(
-                              "CM",
-                              style:
-                                  TextStyle(color: TColor.white, fontSize: 12),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: media.width * 0.04),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 1, vertical: 2),
-                        child: RoundTextField(
-                          controller: txtAge,
-                          hitText: "Your Age",
-                          icon: "assets/img/age.png",
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                      SizedBox(height: media.width * 0.05),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 1, vertical: 2),
-                        child: RoundTextField(
-                          controller: txtBloodType,
-                          hitText: "Blood Group (e.g., B+ve, O+ve)",
-                          icon: "assets/img/blood.png",
-                        ),
-                      ),
-                      SizedBox(height: media.width * 0.05),
-                    ],
-                  ),
-                ),
-                SizedBox(height: media.width * 0.05),
-
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 250, 220, 192),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: media.width * 0.02),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          "Residential Address:-",
-                          style: TextStyle(color: TColor.black, fontSize: 20),
-                        ),
-                      ),
-                      SizedBox(height: media.width * 0.02),
-                      // First Name Field
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 1, vertical: 2),
@@ -523,12 +356,157 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                   ),
                 ),
                 SizedBox(height: media.width * 0.05),
-                // Next Button
+
+                // Physical Details Section
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 250, 220, 192),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: media.width * 0.02),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          "Clinical Information:-",
+                          style: TextStyle(color: TColor.black, fontSize: 20),
+                        ),
+                      ),
+                      SizedBox(height: media.width * 0.02),
+                      // Date of Birth Field
+                      Container(
+                        height: 50, // Set the height to 50
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: TextFormField(
+                          controller: txtDOB,
+                          decoration: const InputDecoration(
+                            hintText: 'Select Date of Birth',
+                            hintStyle: TextStyle(fontSize: 12),
+                            prefixIcon: Icon(Icons.calendar_today),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 20),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                            );
+                            if (pickedDate != null) {
+                              setState(() {
+                                txtDOB.text =
+                                    pickedDate.toString().split(' ')[0];
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(height: media.width * 0.04),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 1, vertical: 2),
+                        child: RoundTextField(
+                          controller: txtAge,
+                          hitText: "Your Age",
+                          icon: "assets/img/age.png",
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      SizedBox(height: media.width * 0.05),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 1, vertical: 2),
+                        child: RoundTextField(
+                          controller: txtBloodType,
+                          hitText: "Blood Group (e.g., B+ve, O+ve)",
+                          icon: "assets/img/blood.png",
+                        ),
+                      ),
+
+                      SizedBox(height: media.width * 0.04),
+                      // Weight Field
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RoundTextField(
+                              controller: txtWeight,
+                              hitText: "Your Weight",
+                              icon: "assets/img/weight.png",
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 50,
+                            height: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: TColor.secondaryG,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Text(
+                              "KG",
+                              style:
+                                  TextStyle(color: TColor.white, fontSize: 12),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: media.width * 0.04),
+                      // Height Field
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RoundTextField(
+                              controller: txtHeight,
+                              hitText: "Your Height",
+                              icon: "assets/img/height.png",
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 50,
+                            height: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: TColor.secondaryG,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Text(
+                              "CM",
+                              style:
+                                  TextStyle(color: TColor.white, fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: media.width * 0.05),
+                    ],
+                  ),
+                ),
+                SizedBox(height: media.width * 0.05),
+
                 RoundButton(
                   title: "Next >",
                   onPressed: () {
                     if (validateFields()) {
-                      addUserToFirestore();
+                      print("UID: ${widget.uid}");
+                      addUserToFirestore(widget.uid);
                       _showMessage(context, "Success",
                           "User details added successfully", Colors.lightGreen);
                       Navigator.push(
@@ -538,7 +516,6 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                               WelcomeView(firstName: txtFirstName.text),
                         ),
                       );
-
                     } else {
                       _showMessage(context, "Error", "Please fill all fields",
                           Colors.red);
@@ -584,13 +561,18 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
     return true;
   }
 
-  void addUserToFirestore() async {
+  void addUserToFirestore(String? uid) async {
+    if (uid == null || uid.isEmpty) {
+      print('Error: uid is null or empty');
+      return;
+    }
+
     try {
       CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('users');
-      await usersCollection.add({
+      await usersCollection.doc(uid).set({
         'gender': selectedGender == 'Male' ? 'Male' : 'Female',
-        'dob': Timestamp.fromDate(selectedDate!),
+        'dob': selectedDate != null ? Timestamp.fromDate(selectedDate!) : null,
         'weight': double.tryParse(txtWeight.text) ?? 0.0,
         'height': double.tryParse(txtHeight.text) ?? 0.0,
         'firstName': txtFirstName.text,
